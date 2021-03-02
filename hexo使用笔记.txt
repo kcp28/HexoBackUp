@@ -1,0 +1,88 @@
+用hexo博客框架搭建静态博客
+1.下载安装node.js 
+	因为hexo时基于node.js 的
+	安装步骤：
+		1>从node.js官网下载安装包
+		2>打开安装包，一直点击下一步
+		3>使用node -v  和  npm -v  命令查看node和npm的版本号，能成功显示说明安装成功
+	查看版本：node -v     npm -v
+2.借助包管理器来安装hexo
+  1>安装cnpm : npm的淘宝镜像源 用这个有点快。
+	安装命令：npm install -g cnpm --registry=https://registry.npm.taobao.org
+	查看版本：cnpm -v
+  2>安装hexo
+	cnpm install -g hexo-cli  //-g 表示全局安装
+    查看版本：hexo -v
+	能查看到版本，表示安装成功。至此，hexo框架已经安装完成。
+3.开始使用hexo，正式开始搭建博客（至此以后的操作可以在git Bash中进行）
+	1>建立博客目录blog：mkdir 路径/blog
+	2>进入blog目录下，使用hexo生成博客：hexo init
+	
+4.新建一篇博客
+	hexo new "博客名" 生成一篇新博客（文章是markdown格式的，放在blog/source/_posts目录下）
+	hexo clean  
+	hexo generate  生成博客
+	hexo start 启动预览 在部署前，可以预览博客
+5.将博客部署到GitHub上去
+	1>创建博客仓库，仓库名一定是：用户名.github.io
+	2>在blog目录下创建一个git插件：cnpm install --save hexo-deployer-git
+	3>设置blog/_config.yml文件
+	# Deployment
+	## Docs: https://hexo.io/docs/deployment.html
+	deploy:
+	type: git
+	repo: https://github.com/kcp28/kcp28.github.io.git //这个是GitHub仓库地址
+	branch: master          //默认master
+
+	4>部署到GitHub上：hexo d
+	在浏览器地址栏用仓库名访问
+6.更换博客主题
+	1>在blog目录下，将GitHub上的主题clone到blog/themes目录下：git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia（yilla 主题名）
+	2>设置主题：修改blog/_config.yml文件
+		# Extensions
+		## Plugins: https://hexo.io/plugins/
+		## Themes: https://hexo.io/themes/
+		theme: yilla  //theme:主题名）
+	3>清理一下：hexo clean
+	4>重新生成一下：hexo g
+	5>推到GitHub上：hexo d
+	
+	
+>hexo next主题高亮显示失败：
+	在hexo的站点配置文件_config.yml中，将 hilight.auto_detect 设置为 true
+	highlight:
+	  enable: true
+	  auto_detect: true
+	  line_number: true
+	  tab_replace:
+	  
+>next主题配置：https://www.jianshu.com/p/3a05351a37dc
+>hexo categories和tags页面不显示解决办法:https://blog.csdn.net/winter_chen001/article/details/79719154
+
+>hexo 中插入图片    hexo网站：https://hexo.io/zh-cn/docs/asset-folders
+   1.打开资源文件管理功能
+      在站点配置文件_config.yml中找到post_asset_folder，把它设置为true:
+	post_asset_folder: true
+      这样就打开了资源文件管理功能，每次新建文章时,都会自动创建一个与文章同名的文件夹，把该篇文章中需要的图片等资源放在
+      这个文件夹中，然后用相对路径引用就行。
+   2.用相对路径引入图片
+     1>用markdown语法引入图片：![](/images/image.jpg)    这种方式图片不会在首页显示，只会在文章页面显示。
+     2>用相对路径引用的标签插件：{% asset_img 图片名称.jpg alt显示的提示信息 %}    这种方式首页和文章页面都会显示图片。
+	
+	
+>hexo 文章中插入自己其他文章的链接：
+  {% post_link 文章名称(不加类型后缀) 文章标题(可选，在页面中显示的文字) %}
+	
+>解决hexo显示数学公式的问题：https://blog.csdn.net/yexiaohhjk/article/details/82526604
+	
+	
+>hexo+gitee ： https://www.cnblogs.com/yizhixue-hx/p/12638361.html
+
+>更改next背景：https://blog.csdn.net/chrishly3/article/details/103992492?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
+	
+	
+	
+	
+	
+	
+	
