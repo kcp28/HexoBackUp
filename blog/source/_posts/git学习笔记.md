@@ -275,6 +275,12 @@ git branch 分支名称
 
 当创建新分支时，会把当前主干分支的内容自动复制过来。
 
+##### 当前分支改名
+
+git branch -M 新分支名
+
+-M 表示强制改名
+
 #### 切换分支
 
 git checkout 分支名称
@@ -409,7 +415,7 @@ git merge [远程地址别名/远程分支名]
 
 ##### 同时拉取、合并—pull
 
-**n git pull [远程库地址别名] [远程分支名]**
+**git pull [远程库地址别名] [远程分支名]**
 
 pull = fetch+merge
 
@@ -430,3 +436,72 @@ git add .     ==> ‘ .’ 表示上传该文件夹下所有问价至暂存区
 git commit –m “提示信息”    ==>提交至本地库时，就不用输入文件名了
 
 git push 远程库地址别名 本地库分支名 
+
+
+
+## 创建新仓库的流程
+
+1.创建初始化本地库
+
+```git
+git init
+```
+
+2.设置签名
+
+```
+git config user.name 用户名
+git config user.email 邮箱
+```
+
+3.创建远程库
+
+最好加一个readme文件，这样就直接创建了一个分支
+
+4.创建远程库地址别名
+
+```
+git remote add [别名] [远程库地址]
+如：git remote add origin 远程库地址
+```
+
+5.拉取远程库内容
+
+如果创建远程库时，自动添加了readme文件，则需先拉取远程库的内容，让本地库取得远程库最新的版本，这样后续才能push成功，不然，push时会报如下的错误：
+
+```
+Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+
+在第一次pull时，若报了错误：
+
+```
+fatal: refusing to merge unrelated histories
+```
+
+这个意思是：本地库于远程库无关联，禁止合并，解决办法为：在pull的时候加上`--allow-unrelated-histories`，即允许无关联的情况下合并
+
+```
+git pull [远程库地址别名] [远程库分支名] --allow-unrelated-histories
+如：
+git pull origin main --allow-unrelated-histories
+```
+
+6.将文件上传至本地库
+
+```
+git add .
+git commit -m '说明信息'
+```
+
+7.将本地库文件上传至远程库
+
+```
+git push -u [远程库别名] [本地库分支名]
+如：
+git push -u origin main
+```
+
