@@ -714,3 +714,16 @@ Example:
 
 
 
+## curl命令
+
+curl 命令根据url访问web页面
+
+基本用法
+
+```shell
+curl url
+
+eg：访问百度
+curl http://www.baidu.com  
+```
+

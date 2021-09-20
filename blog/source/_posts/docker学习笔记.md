@@ -1,10 +1,13 @@
 ---
+
 title: Docker学习笔记
 date: 2020-12-22 16:08:00
 tags:
 - Docker
-categories: 学习笔记系列
+categories: 学习笔记
 ---
+
+内容参考自视频：https://www.bilibili.com/video/BV1og4y1q7M4?spm_id_from=333.788.b_765f64657363.1
 
 ## Docker简介
 
@@ -77,7 +80,7 @@ cat /etc/os-release
 
 1.卸载旧的docker
 
-```
+```shell
 yum remove docker \
                   docker-client \
                   docker-client-latest \
@@ -139,7 +142,6 @@ yum install docker-ce-<版本号> docker-ce-cli-<版本号> containerd.io
 systemctl start docker
 #查看docker版本，确认docker是否启动成功
 docker version
-
 ```
 
 #### 启动hello world
@@ -197,6 +199,13 @@ docker 命令 --help #帮助命令
 ```
 
 帮助文档的地址：https://docs.docker.com/reference/
+
+ps:如果报`Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?	`这个错，可以重启docker服务：
+
+```shell
+#重启docker服务
+systemctl restart docker.service
+```
 
 ### 镜像命令
 
@@ -287,7 +296,7 @@ docker ps
  -q	只显示正在运行的容器的id
 ```
 
-退出容器
+在容器内部，退出容器
 
 ```shell
 exit #停止并退出容器
@@ -641,17 +650,95 @@ ENV#构建的时候设置环境变量
 
 
 
+## Docker Compose
+
+内容参考自视频：https://www.bilibili.com/video/BV1kv411q7Qc
+
+写完文件后 ，定义一个DockerFile文件 然后运用`docker build`命令创建镜像，最后用`docker run`命令创建并运行容器，即运行程序。以上均手动操作，且只是针对单个容器。
+
+使用Docker Compose 定义运行多个容器，来高效管理容器。
+
+### Docker Compose使用步骤
+
+1. 用Dockerfile定义你的app的环境，在任何时候都能重建
+2. 在`docker-compose.yml`中定义创建app的服务，这些app可以在一个单独的环境中一起运行
+3. 运行`docker-compose up`启动Compose,同时运行所有的app
+
+{% asset_img 2.png %}
+
+Compose中：
+
+- services:定义多个服务（应用），一个服务可以是一个容器，如web服务，redis服务，mysql服务等
+- 当执行`docker-compose up`后，services中定义的多个服务一起启动，形成一个完整的项目（project）
+
+### Docker Compose安装
+
+1、下载
+
+下载地址：
+
+```shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+#上面那个可能会很慢，下面这个快 但是可能有问题
+curl -L https://get.daocloud.io/docker/compose/releases/download/1.25.5/docker-compose-`uname -s`-`uname -m`  /usr/local/bin/docker-compose
+```
+
+下载后 到`/user/local/bin`目录下，若有`docker-compose`文件，则说明下载成功
+
+2.授权
+
+```shell
+sudo chmod +x docker-compose
+```
+
+3.查看是否安装成功
+
+在终端使用 `docker-compose version`查看版本，若出现docker-compose的版本号，则说明安装成功
+
+### Docker Compose常用命令
+
+参考自：https://blog.csdn.net/qq_36850813/article/details/102506111?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link
+
+```
+docker-compose up	#启动服务
+
+docker-compose up -d	#后台启动服务
+
+docker-compose config -q	#验证docker-compose.yml文件配置是否正确，正确则不输出任何内容，错误则输出错误信息
+
+docke-compose ps	#查看启动的服务
+
+docker-compose stop	#停止处于运行状态的容器，但不删除这些容器，使用 docker-compose start 可以再次启动这些容器
+
+docker-compose start	#启动已经存在的容器
+
+docker-compose restart	#重启配置中的服务
+
+docker-compose down	#停用并移除所有容器及网络相关的东西
+
+docker-compose rm	#删除所有处于停滞状态的服务容器
+
+docker-compose logs	容器名	#查看容器日志 eg:docker-compose nginx 查看nginx日志
+
+docker-compose logs -f 容器名	#查看容器实时日志
+
+docker-compose exec nginx bash	#进入容器，如进入nginx容器中
+
+docker-compose logs	#查看服务容器的输出
+
+docker-compose build	#构建（重新构建）项目中的服务容器。服务容器一旦构建后，将会带上一个标记名，例如对于 web 项目中的一个 db 容器，可能是 web_db。可以随时在项目目录下运行 docker-compose build 来重新构建服务
+
+docker-compose pull	#拉取服务依赖的镜像
 
 
+docker-compose pause nginx	#暂停nignx容器
+docker-compose unpause nginx	#恢复ningx容器
 
+docker-compose --help	#帮助
+docker-compose up --help	#查看up命令的帮助
 
-
-
-
-
-
-
-
+```
 
 
 
